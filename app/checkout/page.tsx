@@ -29,8 +29,8 @@ import Confetti from 'react-confetti';
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 const personalSchema = z.object({
-  fullName: z.string().min(0),
-  phone: z.string().min(0),
+  fullName: z.string().min(1, 'Full name is required'),
+  phone: z.string().min(1, 'Phone number is required'),
 });
 
 type PersonalValues = z.infer<typeof personalSchema>;
@@ -191,7 +191,7 @@ export default function CheckoutPage() {
   const [orderId, setOrderId] = useState('');
   const [isProcessingDeposit, setIsProcessingDeposit] = useState(false);
   const [depositDone, setDepositDone] = useState(false);
-  const [momoPhone, setMomoPhone] = useState('0780000000');
+  const [momoPhone, setMomoPhone] = useState('');
   const [momoError, setMomoError] = useState('');
   const [windowDimensions, setWindowDimensions] = useState({ width: 0, height: 0 });
 
@@ -208,7 +208,7 @@ export default function CheckoutPage() {
   const form = useForm<PersonalValues>({
     resolver: zodResolver(personalSchema),
     mode: 'onChange',
-    defaultValues: { fullName: 'Test User', phone: '0780000000' },
+    defaultValues: { fullName: '', phone: '' },
   });
 
   // ── Step 1: Personal Info ──────────────────────────────────────────────────
@@ -233,8 +233,11 @@ export default function CheckoutPage() {
   // ── Step 3: MoMo Deposit ───────────────────────────────────────────────────
 
   const handleDepositConfirm = () => {
-    // Accept any input — auto-fill phone if empty
-    const phone = momoPhone.trim() || '0780000000';
+    const phone = momoPhone.trim();
+    if (!phone) {
+      setMomoError(t('errorPhoneRequired', { defaultValue: 'Phone number is required' }));
+      return;
+    }
     setMomoPhone(phone);
     setMomoError('');
     setIsProcessingDeposit(true);
