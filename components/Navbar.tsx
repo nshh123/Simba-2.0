@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Menu, Moon, Search, ShoppingCart, Sun, Globe } from 'lucide-react';
@@ -21,6 +22,7 @@ import { useAuth, useUser, SignInButton, UserButton } from '@clerk/nextjs';
 
 export function Navbar() {
   const { t } = useTranslation();
+  const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { cart, theme, toggleTheme, setLanguage, setCartOpen, searchQuery, setSearchQuery, isEvaluationMode } = useStore();
@@ -126,7 +128,9 @@ export function Navbar() {
 
         <div className="flex items-center gap-2 md:gap-4">
           <div className="hidden lg:flex items-center gap-6 mr-4">
-            <Link href="/" onClick={handleResetHome} className="text-sm font-bold text-white hover:text-white/80 transition-colors">{t('home')}</Link>
+            {pathname !== '/' && (
+              <Link href="/" onClick={handleResetHome} className="text-sm font-bold text-white hover:text-white/80 transition-colors">{t('home')}</Link>
+            )}
             <Link href="/" onClick={() => setSearchQuery('@wishlist')} className="text-sm font-bold text-white hover:text-white/80 transition-colors cursor-pointer">{t('wishlist')}</Link>
             <Link href={isEvaluationMode ? "/checkout?evaluation=true" : "/checkout"} className="text-sm font-bold text-white hover:text-white/80 transition-colors">{t('checkout')}</Link>
           </div>
