@@ -64,23 +64,21 @@ export function CategoryGrid() {
 
       {/* Mobile: horizontal scroll that bleeds to screen edges */}
       <div className="md:hidden -mx-4 px-4 overflow-x-auto scrollbar-hide">
-        <div className="flex gap-4 pb-2 snap-x snap-mandatory">
+        <div className="flex flex-row gap-4 pb-2 w-max snap-x snap-mandatory">
           {CATEGORIES.map((cat) => (
             <button
               key={cat.id}
               onClick={() => handleCategoryClick(cat.id)}
-              className="flex flex-col items-center gap-2 group transition-all w-[72px] shrink-0 snap-start"
+              className="flex flex-col items-center gap-2 group transition-all w-16 shrink-0 snap-start"
             >
-              <div className={`w-14 h-14 ${cat.bg} dark:bg-gray-800 rounded-2xl flex items-center justify-center shadow-sm border border-transparent group-hover:border-primary/20 group-hover:shadow-md transition-all group-active:scale-95`}>
-                <cat.icon className={`w-7 h-7 ${cat.color} group-hover:scale-110 transition-transform`} />
+              <div className={`w-12 h-12 ${cat.bg} dark:bg-gray-800 rounded-2xl flex items-center justify-center shadow-sm border border-transparent group-hover:border-primary/20 group-hover:shadow-md transition-all group-active:scale-95`}>
+                <cat.icon className={`w-6 h-6 ${cat.color} group-hover:scale-110 transition-transform`} />
               </div>
               <span className="text-[10px] leading-snug font-medium text-gray-600 dark:text-gray-300 group-hover:text-primary transition-colors text-center w-full">
                 {t(cat.labelKey)}
               </span>
             </button>
           ))}
-          {/* Spacer for right edge */}
-          <div className="w-1 shrink-0" />
         </div>
       </div>
 
