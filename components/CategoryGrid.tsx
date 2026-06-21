@@ -63,8 +63,8 @@ export function CategoryGrid() {
       <h2 className="text-xl font-bold mb-2 px-4 text-gray-800 dark:text-gray-100">{t('categories')}</h2>
 
       {/* Mobile: horizontal scroll that bleeds to screen edges */}
-      <div className="md:hidden -mx-4 px-4 overflow-x-auto scrollbar-hide">
-        <div className="flex flex-row gap-4 pb-2 w-max snap-x snap-mandatory">
+      <div className="md:hidden -mx-4 px-4 overflow-x-auto scrollbar-hide flex">
+        <div className="flex flex-row gap-4 pb-2 snap-x snap-mandatory after:content-[''] after:w-4 after:shrink-0">
           {CATEGORIES.map((cat) => (
             <button
               key={cat.id}
