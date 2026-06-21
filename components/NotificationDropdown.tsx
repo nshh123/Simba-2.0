@@ -47,13 +47,13 @@ export function NotificationDropdown() {
         )}
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-80" align="end">
-        <DropdownMenuLabel className="flex justify-between items-center">
-          <span>{t('notifications', { defaultValue: 'Notifications' })}</span>
+        <div className="flex justify-between items-center px-2 py-2">
+          <DropdownMenuLabel className="p-0">
+            {t('notifications', { defaultValue: 'Notifications' })}
+          </DropdownMenuLabel>
           {unreadCount > 0 && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-xs h-auto py-1 px-2 text-muted-foreground hover:text-primary"
+            <button
+              className="text-xs py-1 px-2 text-muted-foreground hover:text-primary flex items-center bg-transparent border-none cursor-pointer"
               onClick={(e) => {
                 e.preventDefault();
                 markAllNotificationsAsRead();
@@ -61,15 +61,15 @@ export function NotificationDropdown() {
             >
               <CheckCheck className="h-3 w-3 mr-1" />
               {t('markAllAsRead', { defaultValue: 'Mark all as read' })}
-            </Button>
+            </button>
           )}
-        </DropdownMenuLabel>
+        </div>
         <DropdownMenuSeparator />
         <DropdownMenuGroup className="max-h-[300px] overflow-y-auto">
           {safeNotifications.length === 0 ? (
-            <div className="py-4 text-center text-sm text-muted-foreground">
+            <DropdownMenuItem disabled className="py-4 justify-center text-sm text-muted-foreground">
               {t('noNotifications', { defaultValue: 'No new notifications' })}
-            </div>
+            </DropdownMenuItem>
           ) : (
             safeNotifications.map((notification) => (
               <DropdownMenuItem
