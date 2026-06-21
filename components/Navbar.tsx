@@ -18,6 +18,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { CartDrawer } from './CartDrawer';
+import { NotificationDropdown } from './NotificationDropdown';
 import { useAuth, useUser, SignInButton, UserButton } from '@clerk/nextjs';
 
 export function Navbar() {
@@ -171,6 +172,10 @@ export function Navbar() {
               </button>
             </SignInButton>
           )}
+
+          <div className="hidden md:flex">
+            {mounted && <NotificationDropdown />}
+          </div>
 
           <button
             className="hidden md:inline-flex relative items-center justify-center rounded-lg border border-white/30 p-2 hover:bg-white/20 transition-colors text-white"

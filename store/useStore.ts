@@ -22,6 +22,15 @@ export interface Order {
   review?: number;
 }
 
+export interface AppNotification {
+  id: string;
+  orderId: string;
+  message: string;
+  date: string;
+  read: boolean;
+  type: 'status_update' | 'system';
+}
+
 interface StoreState {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
@@ -45,6 +54,9 @@ interface StoreState {
   addOrder: (order: Order) => void;
   updateOrderStatus: (orderId: string, status: Order['status'], assignedTo?: string) => void;
   addReview: (orderId: string, rating: number) => void;
+  notifications: AppNotification[];
+  markNotificationAsRead: (id: string) => void;
+  markAllNotificationsAsRead: () => void;
   branchInventory: Record<string, Record<string, number>>;
   decreaseInventory: (branchId: string, items: CartItem[]) => void;
   isEvaluationMode: boolean;
@@ -107,14 +119,35 @@ export const useStore = create<StoreState>()(
             ? state.wishlist.filter((id) => id !== productId)
             : [...state.wishlist, productId],
         })),
+      notifications: [],
+      markNotificationAsRead: (id) => set((state) => ({
+        notifications: state.notifications.map((n) => n.id === id ? { ...n, read: true } : n)
+      })),
+      markAllNotificationsAsRead: () => set((state) => ({
+        notifications: state.notifications.map((n) => ({ ...n, read: true }))
+      })),
       orders: [],
       addOrder: (order) => set((state) => ({ orders: [order, ...state.orders] })),
       updateOrderStatus: (orderId, status, assignedTo) =>
-        set((state) => ({
-          orders: state.orders.map((o) =>
-            o.id === orderId ? { ...o, status, ...(assignedTo !== undefined ? { assignedTo } : {}) } : o
-          ),
-        })),
+        set((state) => {
+          const newNotifications = [...state.notifications];
+          if (status === 'Ready for Pick-Up' || status === 'Completed') {
+            newNotifications.unshift({
+              id: Date.now().toString() + Math.random().toString(36).substring(2, 9),
+              orderId,
+              message: `Your order #${orderId.slice(-4)} is now ${status}.`,
+              date: new Date().toISOString(),
+              read: false,
+              type: 'status_update'
+            });
+          }
+          return {
+            orders: state.orders.map((o) =>
+              o.id === orderId ? { ...o, status, ...(assignedTo !== undefined ? { assignedTo } : {}) } : o
+            ),
+            notifications: newNotifications,
+          };
+        }),
       addReview: (orderId, rating) =>
         set((state) => ({
           orders: state.orders.map((o) =>
@@ -143,7 +176,8 @@ export const useStore = create<StoreState>()(
         theme: state.theme,
         wishlist: state.wishlist,
         orders: state.orders,
-        branchInventory: state.branchInventory
+        branchInventory: state.branchInventory,
+        notifications: state.notifications
       }),
     }
   )
