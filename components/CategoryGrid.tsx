@@ -63,23 +63,21 @@ export function CategoryGrid() {
       <h2 className="text-xl font-bold mb-2 px-4 text-gray-800 dark:text-gray-100">{t('categories')}</h2>
 
       {/* Mobile: horizontal scroll that bleeds to screen edges */}
-      <div className="md:hidden -mx-4 px-4 overflow-x-auto scrollbar-hide flex">
-        <div className="flex flex-row gap-4 pb-2 snap-x snap-mandatory after:content-[''] after:w-4 after:shrink-0">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => handleCategoryClick(cat.id)}
-              className="flex flex-col items-center gap-2 group transition-all w-16 shrink-0 snap-start"
-            >
-              <div className={`w-12 h-12 ${cat.bg} dark:bg-gray-800 rounded-2xl flex items-center justify-center shadow-sm border border-transparent group-hover:border-primary/20 group-hover:shadow-md transition-all group-active:scale-95`}>
-                <cat.icon className={`w-6 h-6 ${cat.color} group-hover:scale-110 transition-transform`} />
-              </div>
-              <span className="text-[10px] leading-snug font-medium text-gray-600 dark:text-gray-300 group-hover:text-primary transition-colors text-center w-full">
-                {t(cat.labelKey)}
-              </span>
-            </button>
-          ))}
-        </div>
+      <div className="md:hidden flex overflow-x-auto gap-4 px-4 pb-4 -mx-4 snap-x snap-mandatory scrollbar-hide after:content-[''] after:w-px after:shrink-0">
+        {CATEGORIES.map((cat) => (
+          <button
+            key={cat.id}
+            onClick={() => handleCategoryClick(cat.id)}
+            className="flex flex-col items-center gap-2 group transition-all w-16 shrink-0 snap-start"
+          >
+            <div className={`w-12 h-12 ${cat.bg} dark:bg-gray-800 rounded-2xl flex items-center justify-center shadow-sm border border-transparent group-hover:border-primary/20 group-hover:shadow-md transition-all group-active:scale-95`}>
+              <cat.icon className={`w-6 h-6 ${cat.color} group-hover:scale-110 transition-transform`} />
+            </div>
+            <span className="text-[10px] leading-snug font-medium text-gray-600 dark:text-gray-300 group-hover:text-primary transition-colors text-center w-full">
+              {t(cat.labelKey)}
+            </span>
+          </button>
+        ))}
       </div>
 
       {/* Desktop: grid layout */}
