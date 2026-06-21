@@ -14,10 +14,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
+import { useUser } from '@clerk/nextjs';
 
 export function NotificationDropdown() {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
+  const { user } = useUser();
   const { notifications, markNotificationAsRead, markAllNotificationsAsRead } = useStore();
 
   useEffect(() => {
@@ -28,7 +30,7 @@ export function NotificationDropdown() {
     return null; // Prevent hydration mismatch
   }
 
-  const safeNotifications = notifications || [];
+  const safeNotifications = (notifications || []).filter(n => !n.userId || n.userId === user?.id);
   const unreadCount = safeNotifications.filter((n) => !n.read).length;
 
   return (

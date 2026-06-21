@@ -25,6 +25,7 @@ import {
   ChevronLeft,
 } from 'lucide-react';
 import Confetti from 'react-confetti';
+import { useUser } from '@clerk/nextjs';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -183,6 +184,7 @@ function OrderSummary({
 export default function CheckoutPage() {
   const { t } = useTranslation();
   const { cart, clearCart, addOrder } = useStore();
+  const { user } = useUser();
 
   const [step, setStep] = useState<CheckoutStep>('info');
   const [personalData, setPersonalData] = useState<PersonalValues>({ fullName: '', phone: '' });
@@ -260,6 +262,8 @@ export default function CheckoutPage() {
           pickupTime: selectedTime,
           customerName: personalData.fullName,
           customerPhone: personalData.phone,
+          userId: user?.id,
+          customerEmail: user?.primaryEmailAddress?.emailAddress,
         });
         useStore.getState().decreaseInventory(selectedBranch!.id, cart);
         clearCart();

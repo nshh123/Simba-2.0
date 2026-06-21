@@ -20,6 +20,8 @@ export interface Order {
   customerPhone: string;
   assignedTo?: string;
   review?: number;
+  userId?: string;
+  customerEmail?: string;
 }
 
 export interface AppNotification {
@@ -29,6 +31,7 @@ export interface AppNotification {
   date: string;
   read: boolean;
   type: 'status_update' | 'system';
+  userId?: string;
 }
 
 interface StoreState {
@@ -121,16 +124,17 @@ export const useStore = create<StoreState>()(
         })),
       notifications: [],
       markNotificationAsRead: (id) => set((state) => ({
-        notifications: state.notifications.map((n) => n.id === id ? { ...n, read: true } : n)
+        notifications: (state.notifications || []).map((n) => n.id === id ? { ...n, read: true } : n)
       })),
       markAllNotificationsAsRead: () => set((state) => ({
-        notifications: state.notifications.map((n) => ({ ...n, read: true }))
+        notifications: (state.notifications || []).map((n) => ({ ...n, read: true }))
       })),
       orders: [],
-      addOrder: (order) => set((state) => ({ orders: [order, ...state.orders] })),
+      addOrder: (order) => set((state) => ({ orders: [order, ...(state.orders || [])] })),
       updateOrderStatus: (orderId, status, assignedTo) =>
         set((state) => {
-          const newNotifications = [...state.notifications];
+          const order = (state.orders || []).find((o) => o.id === orderId);
+          const newNotifications = [...(state.notifications || [])];
           if (status === 'Ready for Pick-Up' || status === 'Completed') {
             newNotifications.unshift({
               id: Date.now().toString() + Math.random().toString(36).substring(2, 9),
@@ -138,11 +142,12 @@ export const useStore = create<StoreState>()(
               message: `Your order #${orderId.slice(-4)} is now ${status}.`,
               date: new Date().toISOString(),
               read: false,
-              type: 'status_update'
+              type: 'status_update',
+              userId: order?.userId
             });
           }
           return {
-            orders: state.orders.map((o) =>
+            orders: (state.orders || []).map((o) =>
               o.id === orderId ? { ...o, status, ...(assignedTo !== undefined ? { assignedTo } : {}) } : o
             ),
             notifications: newNotifications,
