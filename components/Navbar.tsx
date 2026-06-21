@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Menu, Moon, Search, ShoppingCart, Sun, Globe } from 'lucide-react';
+import { Menu, Moon, Search, ShoppingCart, Sun, Globe, Bell } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,7 +18,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { CartDrawer } from './CartDrawer';
-import { NotificationDropdown } from './NotificationDropdown';
 import { useAuth, useUser, SignInButton, UserButton } from '@clerk/nextjs';
 
 export function Navbar() {
@@ -26,7 +25,7 @@ export function Navbar() {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const { cart, theme, toggleTheme, setLanguage, setCartOpen, searchQuery, setSearchQuery, isEvaluationMode } = useStore();
+  const { cart, theme, toggleTheme, setLanguage, setCartOpen, searchQuery, setSearchQuery, isEvaluationMode, notifications } = useStore();
   const { isSignedIn } = useAuth();
   const { user } = useUser();
 
@@ -34,7 +33,10 @@ export function Navbar() {
     setMounted(true);
   }, []);
 
-  const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+  const totalItems = (cart || []).reduce((acc, item) => acc + item.quantity, 0);
+
+  const safeNotifications = (notifications || []).filter(n => !n.userId || n.userId === user?.id);
+  const unreadCount = safeNotifications.filter((n) => !n.read).length;
 
   const language = useStore((state) => state.language);
 
@@ -174,7 +176,20 @@ export function Navbar() {
           )}
 
           <div className="hidden md:flex">
-            {mounted && <NotificationDropdown />}
+            {mounted && (
+              <Link
+                href="/notifications"
+                className="relative inline-flex items-center justify-center rounded-lg border border-white/30 p-2 hover:bg-white/20 transition-colors text-white"
+                aria-label="View notifications"
+              >
+                <Bell className="h-5 w-5 text-white" />
+                {unreadCount > 0 && (
+                  <span className="absolute -right-2.5 -top-2.5 flex h-[22px] w-[22px] items-center justify-center rounded-full bg-red-500 text-white ring-2 ring-[#FF8800] text-[10px] font-black shadow-md shadow-black/20">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </Link>
+            )}
           </div>
 
           <button
