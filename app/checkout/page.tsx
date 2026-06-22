@@ -31,7 +31,8 @@ import { useUser } from '@clerk/nextjs';
 
 const personalSchema = z.object({
   fullName: z.string().min(1, 'Full name is required'),
-  phone: z.string().min(1, 'Phone number is required'),
+  phone: z.string().regex(/^(\+250|0)?(78|79|72|73)\d{7}$/, 'Must be a valid Rwandan number (e.g. +25078...)'),
+  deliveryNotes: z.string().optional(),
 });
 
 type PersonalValues = z.infer<typeof personalSchema>;
@@ -195,6 +196,7 @@ export default function CheckoutPage() {
   const [depositDone, setDepositDone] = useState(false);
   const [momoPhone, setMomoPhone] = useState('');
   const [momoError, setMomoError] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState<'momo' | 'cod'>('momo');
   const [windowDimensions, setWindowDimensions] = useState({ width: 0, height: 0 });
 
   const subtotal = cart.reduce((a, i) => a + i.price * i.quantity, 0);
@@ -210,7 +212,7 @@ export default function CheckoutPage() {
   const form = useForm<PersonalValues>({
     resolver: zodResolver(personalSchema),
     mode: 'onChange',
-    defaultValues: { fullName: '', phone: '' },
+    defaultValues: { fullName: '', phone: '', deliveryNotes: '' },
   });
 
   // ── Step 1: Personal Info ──────────────────────────────────────────────────
@@ -235,41 +237,50 @@ export default function CheckoutPage() {
   // ── Step 3: MoMo Deposit ───────────────────────────────────────────────────
 
   const handleDepositConfirm = () => {
-    const phone = momoPhone.trim();
-    if (!phone) {
-      setMomoError(t('errorPhoneRequired', { defaultValue: 'Phone number is required' }));
-      return;
-    }
-    setMomoPhone(phone);
-    setMomoError('');
-    setIsProcessingDeposit(true);
+    if (paymentMethod === 'momo') {
+      const phone = momoPhone.trim();
+      if (!phone) {
+        setMomoError(t('errorPhoneRequired', { defaultValue: 'Phone number is required' }));
+        return;
+      }
+      setMomoPhone(phone);
+      setMomoError('');
+      setIsProcessingDeposit(true);
 
-    // Simulate MoMo push delay
-    setTimeout(() => {
-      setDepositDone(true);
+      // Simulate MoMo push delay
       setTimeout(() => {
-        const id = 'ORD-' + Math.random().toString(36).substring(2, 10).toUpperCase();
-        setOrderId(id);
-        addOrder({
-          id,
-          date: new Date().toISOString(),
-          total: subtotal,
-          deposit: DEPOSIT_AMOUNT,
-          items: [...cart],
-          status: 'Processing',
-          branch: selectedBranch!.name,
-          branchId: selectedBranch!.id,
-          pickupTime: selectedTime,
-          customerName: personalData.fullName,
-          customerPhone: personalData.phone,
-          userId: user?.id,
-          customerEmail: user?.primaryEmailAddress?.emailAddress,
-        });
-        useStore.getState().decreaseInventory(selectedBranch!.id, cart);
-        clearCart();
-        setStep('success');
-      }, 1200);
-    }, 3500);
+        setDepositDone(true);
+        setTimeout(() => {
+          finalizeOrder();
+        }, 1200);
+      }, 3500);
+    } else {
+      finalizeOrder();
+    }
+  };
+
+  const finalizeOrder = () => {
+    const id = 'ORD-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+    setOrderId(id);
+    addOrder({
+      id,
+      date: new Date().toISOString(),
+      total: subtotal,
+      deposit: paymentMethod === 'momo' ? DEPOSIT_AMOUNT : 0,
+      items: [...cart],
+      status: 'Processing',
+      branch: selectedBranch!.name,
+      branchId: selectedBranch!.id,
+      pickupTime: selectedTime,
+      customerName: personalData.fullName,
+      customerPhone: personalData.phone,
+      userId: user?.id,
+      customerEmail: user?.primaryEmailAddress?.emailAddress,
+      deliveryNotes: personalData.deliveryNotes,
+    });
+    useStore.getState().decreaseInventory(selectedBranch!.id, cart);
+    clearCart();
+    setStep('success');
   };
 
   // ── Success ────────────────────────────────────────────────────────────────
@@ -389,12 +400,27 @@ export default function CheckoutPage() {
 
   // ── Main Form ──────────────────────────────────────────────────────────────
 
+  if (subtotal > 0 && subtotal < 2500) {
+    return (
+      <div className="container mx-auto px-4 py-16 flex flex-col items-center justify-center min-h-[50vh] text-center">
+        <ShoppingCart className="h-16 w-16 text-muted-foreground mb-4" />
+        <h2 className="text-2xl font-bold mb-2">Minimum Order Threshold</h2>
+        <p className="text-muted-foreground mb-6">
+          Your cart total is {subtotal.toLocaleString()} RWF. To make deliveries logistically viable, the minimum order amount is 2,500 RWF.
+        </p>
+        <Link href="/">
+          <Button size="lg" className="font-bold">Continue Shopping</Button>
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       <h1 className="text-3xl font-bold mb-2">{t('checkout')}</h1>
       <p className="text-muted-foreground mb-8">
         {t('pickupOnlyNotice', {
-          defaultValue: 'Pick-up from your nearest Simba branch — free, fast, and fresh.',
+          defaultValue: 'Delivery and Pick-up from your nearest Simba branch — fast and fresh.',
         })}
       </p>
 
@@ -442,9 +468,20 @@ export default function CheckoutPage() {
                   />
                   {form.formState.errors.phone && (
                     <p className="text-[0.8rem] text-destructive">
-                      {t('errorPhoneInvalid', { defaultValue: form.formState.errors.phone.message })}
+                      {form.formState.errors.phone.message}
                     </p>
                   )}
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium flex items-center gap-1">
+                    <MapPin className="h-3.5 w-3.5" /> Delivery Instructions & Landmarks
+                  </label>
+                  <textarea
+                    {...form.register('deliveryNotes')}
+                    placeholder="e.g., Opposite Gisozi Sector Office or Near the pharmacy"
+                    className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  />
                 </div>
 
                 <Button
@@ -537,49 +574,75 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              {/* Deposit amount callout */}
-              <div className="flex items-center justify-between bg-primary/5 border border-primary/20 rounded-xl px-5 py-4 mb-6">
-                <div>
-                  <p className="text-sm text-muted-foreground">
-                    {t('depositAmount', { defaultValue: 'Deposit Amount' })}
-                  </p>
-                  <p className="text-3xl font-black text-primary">
-                    {DEPOSIT_AMOUNT.toLocaleString()} RWF
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    {t('nonRefundable', { defaultValue: 'Non-refundable • Credited to your order at pick-up' })}
-                  </p>
+              {/* Payment Method Selection */}
+              <div className="flex gap-4 mb-6">
+                <div
+                  className={`flex-1 border rounded-xl p-4 cursor-pointer transition-all ${
+                    paymentMethod === 'momo' ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-border'
+                  }`}
+                  onClick={() => setPaymentMethod('momo')}
+                >
+                  <p className="font-bold text-sm mb-1">MoMo Deposit</p>
+                  <p className="text-xs text-muted-foreground">Pay 500 RWF deposit now</p>
                 </div>
-                <div className="w-16 h-16 bg-yellow-100 dark:bg-yellow-900/30 rounded-2xl flex items-center justify-center text-3xl">
-                  📱
+                <div
+                  className={`flex-1 border rounded-xl p-4 cursor-pointer transition-all ${
+                    paymentMethod === 'cod' ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-border'
+                  }`}
+                  onClick={() => setPaymentMethod('cod')}
+                >
+                  <p className="font-bold text-sm mb-1">Cash on Delivery</p>
+                  <p className="text-xs text-muted-foreground">Pay full amount on collection</p>
                 </div>
               </div>
 
-              {/* MoMo phone input */}
-              <div className="space-y-2 mb-6">
-                <label className="text-sm font-medium flex items-center gap-1">
-                  <Smartphone className="h-3.5 w-3.5" />
-                  {t('momoNumber', { defaultValue: 'MTN MoMo Number' })}
-                </label>
-                <Input
-                  value={momoPhone}
-                  onChange={(e) => {
-                    setMomoPhone(e.target.value);
-                    setMomoError('');
-                  }}
-                  placeholder={t('placeholderPhone', { defaultValue: 'e.g. 0783456789' })}
-                  className="h-11"
-                />
-                {momoError && (
-                  <p className="text-[0.8rem] text-destructive">{momoError}</p>
-                )}
-                <p className="text-xs text-muted-foreground">
-                  {t('momoHint', {
-                    defaultValue:
-                      'You will receive a MoMo push notification. Enter your PIN to confirm.',
-                  })}
-                </p>
-              </div>
+              {paymentMethod === 'momo' && (
+                <>
+                  {/* Deposit amount callout */}
+                  <div className="flex items-center justify-between bg-primary/5 border border-primary/20 rounded-xl px-5 py-4 mb-6">
+                    <div>
+                      <p className="text-sm text-muted-foreground">
+                        {t('depositAmount', { defaultValue: 'Deposit Amount' })}
+                      </p>
+                      <p className="text-3xl font-black text-primary">
+                        {DEPOSIT_AMOUNT.toLocaleString()} RWF
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {t('nonRefundable', { defaultValue: 'Non-refundable • Credited to your order at pick-up' })}
+                      </p>
+                    </div>
+                    <div className="w-16 h-16 bg-yellow-100 dark:bg-yellow-900/30 rounded-2xl flex items-center justify-center text-3xl">
+                      📱
+                    </div>
+                  </div>
+
+                  {/* MoMo phone input */}
+                  <div className="space-y-2 mb-6">
+                    <label className="text-sm font-medium flex items-center gap-1">
+                      <Smartphone className="h-3.5 w-3.5" />
+                      {t('momoNumber', { defaultValue: 'MTN MoMo Number' })}
+                    </label>
+                    <Input
+                      value={momoPhone}
+                      onChange={(e) => {
+                        setMomoPhone(e.target.value);
+                        setMomoError('');
+                      }}
+                      placeholder={t('placeholderPhone', { defaultValue: 'e.g. 0783456789' })}
+                      className="h-11"
+                    />
+                    {momoError && (
+                      <p className="text-[0.8rem] text-destructive">{momoError}</p>
+                    )}
+                    <p className="text-xs text-muted-foreground">
+                      {t('momoHint', {
+                        defaultValue:
+                          'You will receive a MoMo push notification. Enter your PIN to confirm.',
+                      })}
+                    </p>
+                  </div>
+                </>
+              )}
 
               <div className="flex gap-3">
                 <Button
@@ -593,12 +656,21 @@ export default function CheckoutPage() {
                 </Button>
                 <Button
                   size="lg"
-                  className="flex-1 gap-2 bg-yellow-500 hover:bg-yellow-600 text-black font-bold"
+                  className={`flex-1 gap-2 font-bold ${paymentMethod === 'momo' ? 'bg-yellow-500 hover:bg-yellow-600 text-black' : ''}`}
                   onClick={handleDepositConfirm}
                   disabled={cart.length === 0}
                 >
-                  <Smartphone className="h-4 w-4" />
-                  {t('payDepositNow', { defaultValue: 'Pay 500 RWF Deposit via MoMo' })}
+                  {paymentMethod === 'momo' ? (
+                    <>
+                      <Smartphone className="h-4 w-4" />
+                      {t('payDepositNow', { defaultValue: 'Pay 500 RWF Deposit via MoMo' })}
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle className="h-4 w-4" />
+                      Complete Order
+                    </>
+                  )}
                 </Button>
               </div>
             </div>

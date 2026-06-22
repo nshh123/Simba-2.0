@@ -22,6 +22,7 @@ export interface Order {
   review?: number;
   userId?: string;
   customerEmail?: string;
+  deliveryNotes?: string;
 }
 
 export interface AppNotification {
