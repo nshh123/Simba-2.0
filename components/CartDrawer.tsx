@@ -26,21 +26,22 @@ export function CartDrawer() {
         <SheetHeader className="flex flex-row items-center justify-between border-b pb-4 mb-4">
           <SheetTitle>{t('yourCart')}</SheetTitle>
           {cart.length > 0 && (
-            <Button variant="ghost" size="sm" className="h-8 text-destructive hover:text-destructive/90 hover:bg-destructive/10" onClick={clearCart}>
-              Clear Cart
+            <Button variant="destructive" size="sm" onClick={clearCart} className="h-8 px-3 text-xs font-bold gap-1.5">
+              <Trash2 className="h-3.5 w-3.5" />
+              {t('clearCart')}
             </Button>
           )}
         </SheetHeader>
         
         {cart.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center space-y-4 px-4 text-center">
-            <div className="w-24 h-24 bg-muted/50 rounded-full flex items-center justify-center mb-2">
-              <ShoppingCart className="h-10 w-10 text-muted-foreground/50" />
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-6">
+              <ShoppingCart className="h-10 w-10 text-muted-foreground" />
             </div>
-            <h3 className="text-xl font-bold">{t('emptyCart')}</h3>
-            <p className="text-muted-foreground text-sm max-w-xs">Looks like you haven't added anything to your cart yet.</p>
-            <Button size="lg" className="font-bold mt-4" onClick={() => setCartOpen(false)}>
-              Go to Shop
+            <p className="text-xl font-bold mb-2">{t('emptyCart')}</p>
+            <p className="text-muted-foreground mb-8 max-w-[200px]">{t('emptyCartMsg')}</p>
+            <Button onClick={() => setCartOpen(false)} className="w-full max-w-[200px] font-bold">
+              {t('goToShop')}
             </Button>
           </div>
         ) : (
@@ -63,7 +64,7 @@ export function CartDrawer() {
                       </div>
                       <div className="flex items-center justify-between mt-2">
                         <div className="flex items-center space-x-2">
-                          <Button variant="ghost" size="icon" className="h-6 w-6 shrink-0 text-muted-foreground hover:text-primary" onClick={() => saveForLater(item.id)} title="Save for later">
+                          <Button variant="ghost" size="icon" className="h-6 w-6 shrink-0 text-muted-foreground hover:text-primary" onClick={() => saveForLater(item.id)} title={t('saveForLater')}>
                             <Bookmark className="h-4 w-4" />
                           </Button>
                           <Button variant="outline" size="icon" className="h-6 w-6 shrink-0" onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}>
@@ -84,7 +85,7 @@ export function CartDrawer() {
               {/* Saved for Later Shelf */}
               {savedForLater.length > 0 && (
                 <div className="mt-6 border-t pt-4">
-                  <h4 className="font-semibold text-sm mb-3">Saved for Later ({savedForLater.length})</h4>
+                  <h4 className="font-semibold text-sm mb-3">{t('savedForLater')} ({savedForLater.length})</h4>
                   <div className="space-y-4">
                     {savedForLater.map((item) => (
                       <div key={item.id} className="flex gap-4 opacity-75 hover:opacity-100 transition-opacity">
@@ -100,10 +101,10 @@ export function CartDrawer() {
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
-                          <div className="flex items-center justify-between mt-1">
+                          <div className="flex items-center justify-between">
                             <span className="font-medium text-sm">{(item.price * item.quantity).toLocaleString('en-US')} RWF</span>
                             <Button variant="secondary" size="sm" className="h-7 text-xs font-bold" onClick={() => moveToCart(item.id)}>
-                              Move to Cart
+                              {t('moveToCart')}
                             </Button>
                           </div>
                         </div>

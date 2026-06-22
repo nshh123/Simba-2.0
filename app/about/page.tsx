@@ -1,13 +1,17 @@
+'use client';
+
 import React from 'react';
 import { Mail, Phone, MapPin, Clock, History } from 'lucide-react';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 
 export default function AboutPage() {
+  const { t } = useTranslation();
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl min-h-[70vh]">
       <div className="mb-8 text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-primary">About Simba</h1>
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-primary">{t('aboutSimba')}</h1>
         <p className="text-xl text-muted-foreground">Your trusted retail partner in Rwanda since 2007.</p>
       </div>
 
@@ -31,7 +35,7 @@ export default function AboutPage() {
         {/* Contact Section */}
         <div className="space-y-6">
           <div className="bg-card border rounded-2xl p-8 shadow-sm h-full">
-            <h2 className="text-2xl font-bold mb-6">Contact Us</h2>
+            <h2 className="text-2xl font-bold mb-6">{t('contactUs')}</h2>
             
             <div className="space-y-5">
               <div className="flex items-start gap-4">
@@ -74,7 +78,7 @@ export default function AboutPage() {
       <div className="mt-12 text-center">
         <Link href="/">
           <Button size="lg" className="font-bold">
-            Start Shopping
+            {t('startShopping')}
           </Button>
         </Link>
       </div>

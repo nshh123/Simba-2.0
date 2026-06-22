@@ -2,34 +2,21 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 import { ChevronDown, ChevronUp, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const faqs = [
-  {
-    question: "How does delivery work on public holidays?",
-    answer: "Our delivery service operates on a special schedule during public holidays. We typically stop taking same-day delivery orders at 2:00 PM on holidays to ensure all staff have time with their families. Please check our homepage for specific holiday announcements.",
-  },
-  {
-    question: "What is your return policy for fresh vegetables?",
-    answer: "We guarantee the freshness of all our produce. If you are not satisfied with the quality of any fresh vegetables or fruits upon delivery or pick-up, please notify us within 24 hours. We will replace the item or issue a full refund to your original payment method.",
-  },
-  {
-    question: "Do you offer Cash on Delivery?",
-    answer: "Yes, we do! You can select 'Cash on Delivery' at checkout. You simply pay the full amount when you collect your order or when it's delivered to you. We also offer a MoMo Deposit option for securing items in advance.",
-  },
-  {
-    question: "What happens if I miss my pick-up window?",
-    answer: "If you are running late, your order will be safely stored. Refrigerated or frozen items will be kept at the appropriate temperature. We hold pick-up orders until the end of the business day. If uncollected, we will contact you to reschedule.",
-  },
-  {
-    question: "Can I modify my order after placing it?",
-    answer: "You cannot modify an order yourself once it is placed. However, if you contact our customer support team immediately at info@simbasupermarket.rw or call us, we can typically make changes if the order hasn't been prepared or dispatched yet.",
-  }
-];
-
 export default function FAQPage() {
+  const { t } = useTranslation();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  const faqs = [
+    { question: t('faqQ1'), answer: t('faqA1') },
+    { question: t('faqQ2'), answer: t('faqA2') },
+    { question: t('faqQ3'), answer: t('faqA3') },
+    { question: t('faqQ4'), answer: t('faqA4') },
+    { question: t('faqQ5'), answer: t('faqA5') }
+  ];
 
   const toggleAccordion = (index: number) => {
     setOpenIndex((prev) => (prev === index ? null : index));
@@ -41,8 +28,8 @@ export default function FAQPage() {
         <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
           <HelpCircle className="h-8 w-8 text-primary" />
         </div>
-        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-primary">Frequently Asked Questions</h1>
-        <p className="text-lg text-muted-foreground">Find answers to common questions about shopping with Simba.</p>
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-primary">{t('faqTitle')}</h1>
+        <p className="text-lg text-muted-foreground">{t('faqDesc')}</p>
       </div>
 
       <div className="space-y-4">
@@ -76,11 +63,11 @@ export default function FAQPage() {
       </div>
 
       <div className="mt-12 text-center bg-muted/50 p-8 rounded-2xl">
-        <h2 className="text-xl font-bold mb-2">Still have questions?</h2>
-        <p className="text-muted-foreground mb-6">Our customer support team is here to help you.</p>
+        <h2 className="text-xl font-bold mb-2">{t('stillHaveQuestions')}</h2>
+        <p className="text-muted-foreground mb-6">{t('customerSupport')}</p>
         <Link href="/about">
           <Button variant="outline" size="lg" className="font-bold">
-            Contact Us
+            {t('contactUs')}
           </Button>
         </Link>
       </div>

@@ -134,8 +134,8 @@ export function Navbar() {
             {pathname !== '/' && (
               <Link href="/" onClick={handleResetHome} className="text-sm font-bold text-white hover:text-white/80 transition-colors">{t('home')}</Link>
             )}
-            <Link href="/about" className="text-sm font-bold text-white hover:text-white/80 transition-colors">About Simba</Link>
-            <Link href="/faq" className="text-sm font-bold text-white hover:text-white/80 transition-colors">FAQ</Link>
+            <Link href="/about" className="text-sm font-bold text-white hover:text-white/80 transition-colors">{t('aboutSimba')}</Link>
+            <Link href="/faq" className="text-sm font-bold text-white hover:text-white/80 transition-colors">{t('faq')}</Link>
             <Link href="/" onClick={() => setSearchQuery('@wishlist')} className="text-sm font-bold text-white hover:text-white/80 transition-colors cursor-pointer">{t('wishlist')}</Link>
             <Link href={isEvaluationMode ? "/checkout?evaluation=true" : "/checkout"} className="text-sm font-bold text-white hover:text-white/80 transition-colors">{t('checkout')}</Link>
           </div>

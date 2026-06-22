@@ -162,7 +162,7 @@ export function QuickViewModal({ product, onClose }: QuickViewProps) {
             
             {/* Social Share */}
             <div className="mt-4 pt-4 border-t flex items-center justify-center gap-4">
-              <span className="text-sm font-medium text-muted-foreground mr-2">Share:</span>
+              <span className="text-sm font-medium text-muted-foreground mr-2">{t('share')}:</span>
               <a href={`https://wa.me/?text=${encodeURIComponent(shareText + ' ' + productUrl)}`} target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center text-green-600 hover:bg-green-200 transition-colors">
                 <MessageCircle className="h-4 w-4" />
               </a>

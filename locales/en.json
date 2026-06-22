@@ -189,26 +189,119 @@
   "aiChat_placeholder": "Ask Simba AI...",
   "aiChat_poweredBy": "Powered by Groq",
   "aiChat_error": "I'm having trouble thinking right now",
+  "clearCart": "Clear Cart",
+  "emptyCartMsg": "Looks like you haven't added anything to your cart yet.",
+  "goToShop": "Go to Shop",
+  "savedForLater": "Saved for Later",
+  "moveToCart": "Move to Cart",
+  "saveForLater": "Save for later",
+  "share": "Share",
+  "aboutSimba": "About Simba",
+  "faq": "FAQ",
+  "faqTitle": "Frequently Asked Questions",
+  "faqDesc": "Find answers to common questions about shopping with Simba.",
+  "stillHaveQuestions": "Still have questions?",
+  "customerSupport": "Our customer support team is here to help you.",
+  "contactUs": "Contact Us",
+  "minOrderThreshold": "Minimum Order Threshold",
+  "minOrderDesc": "Your cart total is {{subtotal}} RWF. To make deliveries logistically viable, the minimum order amount is 2,500 RWF.",
+  "continueShopping": "Continue Shopping",
+  "deliveryInstructions": "Delivery Instructions & Landmarks",
+  "deliveryInstructionsPlaceholder": "e.g., Opposite Gisozi Sector Office or Near the pharmacy",
+  "momoDepositMethod": "MoMo Deposit",
+  "payDepositNowSubtitle": "Pay 500 RWF deposit now",
+  "cashOnDelivery": "Cash on Delivery",
+  "payFullOnCollection": "Pay full amount on collection",
+  "faqQ1": "How does delivery work on public holidays?",
+  "faqA1": "Our delivery service operates on a special schedule during public holidays. We typically stop taking same-day delivery orders at 2:00 PM on holidays to ensure all staff have time with their families. Please check our homepage for specific holiday announcements.",
+  "faqQ2": "What is your return policy for fresh vegetables?",
+  "faqA2": "We guarantee the freshness of all our produce. If you are not satisfied with the quality of any fresh vegetables or fruits upon delivery or pick-up, please notify us within 24 hours. We will replace the item or issue a full refund to your original payment method.",
+  "faqQ3": "Do you offer Cash on Delivery?",
+  "faqA3": "Yes, we do! You can select 'Cash on Delivery' at checkout. You simply pay the full amount when you collect your order or when it's delivered to you. We also offer a MoMo Deposit option for securing items in advance.",
+  "faqQ4": "What happens if I miss my pick-up window?",
+  "faqA4": "If you are running late, your order will be safely stored. Refrigerated or frozen items will be kept at the appropriate temperature. We hold pick-up orders until the end of the business day. If uncollected, we will contact you to reschedule.",
+  "faqQ5": "Can I modify my order after placing it?",
+  "faqA5": "You cannot modify an order yourself once it is placed. However, if you contact our customer support team immediately at info@simbasupermarket.rw or call us, we can typically make changes if the order hasn't been prepared or dispatched yet.",
   "products": {
-    "prod-001": { "name": "Inyange Fresh Milk 1L", "description": "Locally sourced fresh whole milk from Inyange." },
-    "prod-002": { "name": "Rwandan Arabica Coffee 500g", "description": "Premium roasted Rwandan Arabica coffee beans." },
-    "prod-003": { "name": "Avocado (Local kg)", "description": "Fresh, large locally grown avocados." },
-    "prod-004": { "name": "Mutzig Beer 50cl", "description": "Popular local amber lager beer." },
-    "prod-005": { "name": "Bakhresa Azam Wheat Flour 2kg", "description": "Fine wheat flour perfect for baking." },
-    "prod-006": { "name": "Gorilla's Coffee Medium Roast", "description": "Rich and bold mountain grown coffee." },
-    "prod-007": { "name": "Yellow Bananas", "description": "Sweet ripe bananas by the bunch." },
-    "prod-008": { "name": "Akarabo Honey 500g", "description": "Pure natural honey from local beekeepers." },
-    "prod-009": { "name": "Inyange Yoghurt Strawberry 500ml", "description": "Creamy strawberry-flavoured yoghurt from Inyange." },
-    "prod-010": { "name": "Fresh Tomatoes (kg)", "description": "Vine-ripened local tomatoes, perfect for sauces." },
-    "prod-011": { "name": "Skol Lager 50cl", "description": "Light and refreshing lager brewed locally." },
-    "prod-012": { "name": "Basmati Rice 5kg", "description": "Premium long-grain basmati rice for everyday meals." },
-    "prod-013": { "name": "Fresh Eggs (Tray of 30)", "description": "Farm-fresh eggs from local free-range hens." },
-    "prod-014": { "name": "Red Onions (kg)", "description": "Crisp and flavourful locally grown red onions." },
-    "prod-015": { "name": "Sunflower Cooking Oil 5L", "description": "Pure sunflower oil ideal for frying and cooking." },
-    "prod-016": { "name": "Green Peppers (kg)", "description": "Fresh crunchy green bell peppers." },
-    "prod-017": { "name": "Inyange Water 1.5L (Pack of 6)", "description": "Natural spring water from the highlands of Rwanda." },
-    "prod-018": { "name": "White Sugar 1kg", "description": "Refined white sugar for baking and beverages." },
-    "prod-019": { "name": "Cheddar Cheese Block 250g", "description": "Rich and creamy aged cheddar cheese." },
-    "prod-020": { "name": "Passion Fruit Juice 1L", "description": "Freshly pressed tropical passion fruit juice." }
+    "prod-001": {
+      "name": "Inyange Fresh Milk 1L",
+      "description": "Locally sourced fresh whole milk from Inyange."
+    },
+    "prod-002": {
+      "name": "Rwandan Arabica Coffee 500g",
+      "description": "Premium roasted Rwandan Arabica coffee beans."
+    },
+    "prod-003": {
+      "name": "Avocado (Local kg)",
+      "description": "Fresh, large locally grown avocados."
+    },
+    "prod-004": {
+      "name": "Mutzig Beer 50cl",
+      "description": "Popular local amber lager beer."
+    },
+    "prod-005": {
+      "name": "Bakhresa Azam Wheat Flour 2kg",
+      "description": "Fine wheat flour perfect for baking."
+    },
+    "prod-006": {
+      "name": "Gorilla's Coffee Medium Roast",
+      "description": "Rich and bold mountain grown coffee."
+    },
+    "prod-007": {
+      "name": "Yellow Bananas",
+      "description": "Sweet ripe bananas by the bunch."
+    },
+    "prod-008": {
+      "name": "Akarabo Honey 500g",
+      "description": "Pure natural honey from local beekeepers."
+    },
+    "prod-009": {
+      "name": "Inyange Yoghurt Strawberry 500ml",
+      "description": "Creamy strawberry-flavoured yoghurt from Inyange."
+    },
+    "prod-010": {
+      "name": "Fresh Tomatoes (kg)",
+      "description": "Vine-ripened local tomatoes, perfect for sauces."
+    },
+    "prod-011": {
+      "name": "Skol Lager 50cl",
+      "description": "Light and refreshing lager brewed locally."
+    },
+    "prod-012": {
+      "name": "Basmati Rice 5kg",
+      "description": "Premium long-grain basmati rice for everyday meals."
+    },
+    "prod-013": {
+      "name": "Fresh Eggs (Tray of 30)",
+      "description": "Farm-fresh eggs from local free-range hens."
+    },
+    "prod-014": {
+      "name": "Red Onions (kg)",
+      "description": "Crisp and flavourful locally grown red onions."
+    },
+    "prod-015": {
+      "name": "Sunflower Cooking Oil 5L",
+      "description": "Pure sunflower oil ideal for frying and cooking."
+    },
+    "prod-016": {
+      "name": "Green Peppers (kg)",
+      "description": "Fresh crunchy green bell peppers."
+    },
+    "prod-017": {
+      "name": "Inyange Water 1.5L (Pack of 6)",
+      "description": "Natural spring water from the highlands of Rwanda."
+    },
+    "prod-018": {
+      "name": "White Sugar 1kg",
+      "description": "Refined white sugar for baking and beverages."
+    },
+    "prod-019": {
+      "name": "Cheddar Cheese Block 250g",
+      "description": "Rich and creamy aged cheddar cheese."
+    },
+    "prod-020": {
+      "name": "Passion Fruit Juice 1L",
+      "description": "Freshly pressed tropical passion fruit juice."
+    }
   }
 }

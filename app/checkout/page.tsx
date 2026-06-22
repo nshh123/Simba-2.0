@@ -23,6 +23,7 @@ import {
   ShoppingCart,
   ChevronRight,
   ChevronLeft,
+  CreditCard,
 } from 'lucide-react';
 import Confetti from 'react-confetti';
 import { useUser } from '@clerk/nextjs';
@@ -404,12 +405,12 @@ export default function CheckoutPage() {
     return (
       <div className="container mx-auto px-4 py-16 flex flex-col items-center justify-center min-h-[50vh] text-center">
         <ShoppingCart className="h-16 w-16 text-muted-foreground mb-4" />
-        <h2 className="text-2xl font-bold mb-2">Minimum Order Threshold</h2>
+        <h2 className="text-2xl font-bold mb-2">{t('minOrderThresholdTitle', { defaultValue: 'Minimum Order Not Met' })}</h2>
         <p className="text-muted-foreground mb-6">
-          Your cart total is {subtotal.toLocaleString()} RWF. To make deliveries logistically viable, the minimum order amount is 2,500 RWF.
+          {t('minOrderDesc', { subtotal: subtotal.toLocaleString() })}
         </p>
         <Link href="/">
-          <Button size="lg" className="font-bold">Continue Shopping</Button>
+          <Button size="lg" className="font-bold">{t('continueShopping')}</Button>
         </Link>
       </div>
     );
@@ -475,11 +476,11 @@ export default function CheckoutPage() {
 
                 <div className="space-y-2">
                   <label className="text-sm font-medium flex items-center gap-1">
-                    <MapPin className="h-3.5 w-3.5" /> Delivery Instructions & Landmarks
+                    <MapPin className="h-3.5 w-3.5" /> {t('deliveryInstructions', { defaultValue: 'Delivery Instructions & Landmarks' })}
                   </label>
                   <textarea
                     {...form.register('deliveryNotes')}
-                    placeholder="e.g., Opposite Gisozi Sector Office or Near the pharmacy"
+                    placeholder={t('deliveryInstructionsPlaceholder', { defaultValue: 'e.g., Opposite Gisozi Sector Office or Near the pharmacy' })}
                     className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   />
                 </div>
@@ -539,18 +540,15 @@ export default function CheckoutPage() {
             </div>
           )}
 
-          {/* Step 3: MoMo Deposit */}
+          {/* Step 3: Payment Method */}
           {step === 'deposit' && (
             <div className="bg-card border rounded-2xl p-6 shadow-sm">
               <h2 className="text-xl font-bold mb-1 flex items-center gap-2">
-                <Smartphone className="h-5 w-5 text-primary" />
-                {t('momoDepositTitle', { defaultValue: 'Confirm with MoMo Deposit' })}
+                <CreditCard className="h-5 w-5 text-primary" />
+                {t('paymentMethods', { defaultValue: 'Payment Method' })}
               </h2>
               <p className="text-sm text-muted-foreground mb-6">
-                {t('depositDesc', {
-                  defaultValue:
-                    'A small non-refundable deposit of 500 RWF is required via MTN Mobile Money to confirm your order and reserve staff time.',
-                })}
+                {t('paymentMethodsDesc', { defaultValue: 'Choose how you want to pay for your order.' })}
               </p>
 
               {/* Order summary card */}
@@ -582,8 +580,8 @@ export default function CheckoutPage() {
                   }`}
                   onClick={() => setPaymentMethod('momo')}
                 >
-                  <p className="font-bold text-sm mb-1">MoMo Deposit</p>
-                  <p className="text-xs text-muted-foreground">Pay 500 RWF deposit now</p>
+                  <p className="font-bold text-sm mb-1">{t('momoDepositMethod')}</p>
+                  <p className="text-xs text-muted-foreground">{t('payDepositNowSubtitle')}</p>
                 </div>
                 <div
                   className={`flex-1 border rounded-xl p-4 cursor-pointer transition-all ${
@@ -591,8 +589,8 @@ export default function CheckoutPage() {
                   }`}
                   onClick={() => setPaymentMethod('cod')}
                 >
-                  <p className="font-bold text-sm mb-1">Cash on Delivery</p>
-                  <p className="text-xs text-muted-foreground">Pay full amount on collection</p>
+                  <p className="font-bold text-sm mb-1">{t('cashOnDelivery')}</p>
+                  <p className="text-xs text-muted-foreground">{t('payFullOnCollection')}</p>
                 </div>
               </div>
 
