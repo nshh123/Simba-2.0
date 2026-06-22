@@ -6,12 +6,12 @@ import { useTranslation } from 'react-i18next';
 import { useStore } from '@/store/useStore';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { Minus, Plus, Trash2 } from 'lucide-react';
+import { Minus, Plus, Trash2, ShoppingCart } from 'lucide-react';
 
 export function CartDrawer() {
   const router = useRouter();
   const { t } = useTranslation();
-  const { cart, isCartOpen, setCartOpen, updateQuantity, removeFromCart } = useStore();
+  const { cart, isCartOpen, setCartOpen, updateQuantity, removeFromCart, clearCart } = useStore();
 
   const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
@@ -23,14 +23,25 @@ export function CartDrawer() {
   return (
     <Sheet open={isCartOpen} onOpenChange={setCartOpen}>
       <SheetContent className="flex flex-col w-full sm:max-w-lg">
-        <SheetHeader>
+        <SheetHeader className="flex flex-row items-center justify-between border-b pb-4 mb-4">
           <SheetTitle>{t('yourCart')}</SheetTitle>
+          {cart.length > 0 && (
+            <Button variant="ghost" size="sm" className="h-8 text-destructive hover:text-destructive/90 hover:bg-destructive/10" onClick={clearCart}>
+              Clear Cart
+            </Button>
+          )}
         </SheetHeader>
         
         {cart.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center space-y-4">
-            <span className="text-muted-foreground">{t('emptyCart')}</span>
-            <Button variant="outline" onClick={() => setCartOpen(false)}>{t('startShopping')}</Button>
+          <div className="flex-1 flex flex-col items-center justify-center space-y-4 px-4 text-center">
+            <div className="w-24 h-24 bg-muted/50 rounded-full flex items-center justify-center mb-2">
+              <ShoppingCart className="h-10 w-10 text-muted-foreground/50" />
+            </div>
+            <h3 className="text-xl font-bold">{t('emptyCart')}</h3>
+            <p className="text-muted-foreground text-sm max-w-xs">Looks like you haven't added anything to your cart yet.</p>
+            <Button size="lg" className="font-bold mt-4" onClick={() => setCartOpen(false)}>
+              Go to Shop
+            </Button>
           </div>
         ) : (
           <>
