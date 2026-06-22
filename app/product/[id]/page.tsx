@@ -9,7 +9,7 @@ import { useStore } from '@/store/useStore';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Minus, Plus, ShoppingCart, CheckCircle, XCircle } from 'lucide-react';
+import { Minus, Plus, ShoppingCart, CheckCircle, XCircle, MessageCircle, Share2 } from 'lucide-react';
 import { Product } from '@/types';
 
 export default function ProductDetailPage() {
@@ -35,6 +35,9 @@ export default function ProductDetailPage() {
 
   const handleDecrease = () => setQuantity((prev) => Math.max(1, prev - 1));
   const handleIncrease = () => setQuantity((prev) => prev + 1);
+
+  const productUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const shareText = `Check out ${product.name} at Simba Supermarket!`;
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-16 max-w-6xl">
@@ -127,6 +130,20 @@ export default function ProductDetailPage() {
               <ShoppingCart className="mr-2 h-5 w-5" />
               {t('addToCart')}
             </Button>
+            
+            {/* Social Share */}
+            <div className="pt-4 flex items-center justify-center gap-4">
+              <span className="text-sm font-medium text-muted-foreground mr-2">Share:</span>
+              <a href={`https://wa.me/?text=${encodeURIComponent(shareText + ' ' + productUrl)}`} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 hover:bg-green-200 transition-colors">
+                <MessageCircle className="h-5 w-5" />
+              </a>
+              <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}`} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 hover:bg-blue-200 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+              </a>
+              <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(productUrl)}`} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-800 hover:bg-slate-200 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
+              </a>
+            </div>
           </div>
         </div>
       </div>

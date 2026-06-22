@@ -41,6 +41,7 @@ interface StoreState {
   selectedCategory: string;
   setSelectedCategory: (category: string) => void;
   cart: CartItem[];
+  savedForLater: CartItem[];
   theme: 'light' | 'dark';
   language: 'en' | 'fr' | 'rw';
   isCartOpen: boolean;
@@ -49,6 +50,9 @@ interface StoreState {
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
+  saveForLater: (productId: string) => void;
+  moveToCart: (productId: string) => void;
+  removeFromSaved: (productId: string) => void;
   toggleTheme: () => void;
   setTheme: (theme: 'light' | 'dark') => void;
   setLanguage: (language: 'en' | 'fr' | 'rw') => void;
@@ -75,6 +79,7 @@ export const useStore = create<StoreState>()(
       selectedCategory: 'All',
       setSelectedCategory: (selectedCategory) => set({ selectedCategory }),
       cart: [],
+      savedForLater: [],
       theme: 'light',
       language: 'en',
       isCartOpen: false,
@@ -106,6 +111,36 @@ export const useStore = create<StoreState>()(
           ),
         })),
       clearCart: () => set({ cart: [] }),
+      saveForLater: (productId) =>
+        set((state) => {
+          const item = state.cart.find((i) => i.id === productId);
+          if (!item) return state;
+          return {
+            cart: state.cart.filter((i) => i.id !== productId),
+            savedForLater: [...(state.savedForLater || []), item],
+          };
+        }),
+      moveToCart: (productId) =>
+        set((state) => {
+          const item = (state.savedForLater || []).find((i) => i.id === productId);
+          if (!item) return state;
+          
+          const existingCartItem = state.cart.find((i) => i.id === productId);
+          const newCart = existingCartItem
+            ? state.cart.map((i) =>
+                i.id === productId ? { ...i, quantity: i.quantity + item.quantity } : i
+              )
+            : [...state.cart, item];
+
+          return {
+            savedForLater: (state.savedForLater || []).filter((i) => i.id !== productId),
+            cart: newCart,
+          };
+        }),
+      removeFromSaved: (productId) =>
+        set((state) => ({
+          savedForLater: (state.savedForLater || []).filter((i) => i.id !== productId),
+        })),
       toggleTheme: () =>
         set((state) => {
           if (typeof window !== 'undefined') localStorage.setItem('theme-user-choice', 'true');
@@ -178,6 +213,7 @@ export const useStore = create<StoreState>()(
       name: 'simba-store',
       partialize: (state) => ({
         cart: state.cart,
+        savedForLater: state.savedForLater,
         language: state.language,
         theme: state.theme,
         wishlist: state.wishlist,
