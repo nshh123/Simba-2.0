@@ -221,6 +221,16 @@
   "faqA4": "Si vous êtes en retard, votre commande sera conservée en toute sécurité.",
   "faqQ5": "Puis-je modifier ma commande après l'avoir passée ?",
   "faqA5": "Vous ne pouvez pas modifier vous-même une commande une fois qu'elle est passée.",
+  "aboutSubtitle": "Votre partenaire de vente au détail de confiance au Rwanda depuis 2007.",
+  "ourHistory": "Notre Histoire",
+  "historyP1": "Fondé en 2007, le supermarché Simba est passé d'un magasin unique à l'une des chaînes de vente au détail les plus importantes et les plus fiables du Rwanda.",
+  "historyP2": "Nous nous engageons à fournir à nos clients des produits de la plus haute qualité, un service exceptionnel et une expérience d'achat moderne, en magasin ou en ligne.",
+  "emailSupport": "Support par e-mail",
+  "localPhoneLines": "Lignes téléphoniques locales",
+  "customerServicePhone": "Service client : +250 788 123 456",
+  "deliveryTeamPhone": "Équipe de livraison : +250 788 654 321",
+  "operatingHours": "Heures d'ouverture",
+  "operatingHoursTime": "Lun - Dim : 8h00 - 22h00",
   "products": {
     "prod-001": {
       "name": "Lait frais Inyange 1L",

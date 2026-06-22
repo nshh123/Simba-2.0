@@ -12,7 +12,7 @@ export default function AboutPage() {
     <div className="container mx-auto px-4 py-12 max-w-4xl min-h-[70vh]">
       <div className="mb-8 text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-primary">{t('aboutSimba')}</h1>
-        <p className="text-xl text-muted-foreground">Your trusted retail partner in Rwanda since 2007.</p>
+        <p className="text-xl text-muted-foreground">{t('aboutSubtitle')}</p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-12 mt-12">
@@ -22,12 +22,12 @@ export default function AboutPage() {
             <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-6">
               <History className="h-6 w-6 text-primary" />
             </div>
-            <h2 className="text-2xl font-bold mb-4">Our History</h2>
+            <h2 className="text-2xl font-bold mb-4">{t('ourHistory')}</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              Founded in 2007, Simba Supermarket has grown from a single store to become one of Rwanda's leading and most trusted retail chains.
+              {t('historyP1')}
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              We are committed to providing our customers with the highest quality products, exceptional service, and a modern shopping experience, whether in-store or online.
+              {t('historyP2')}
             </p>
           </div>
         </div>
@@ -43,7 +43,7 @@ export default function AboutPage() {
                   <Mail className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <p className="font-semibold mb-0.5">Email Support</p>
+                  <p className="font-semibold mb-0.5">{t('emailSupport')}</p>
                   <a href="mailto:info@simbasupermarket.rw" className="text-muted-foreground hover:text-primary transition-colors">
                     info@simbasupermarket.rw
                   </a>
@@ -55,9 +55,9 @@ export default function AboutPage() {
                   <Phone className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <p className="font-semibold mb-0.5">Local Phone Lines</p>
-                  <p className="text-muted-foreground">Customer Service: +250 788 123 456</p>
-                  <p className="text-muted-foreground">Delivery Team: +250 788 654 321</p>
+                  <p className="font-semibold mb-0.5">{t('localPhoneLines')}</p>
+                  <p className="text-muted-foreground">{t('customerServicePhone')}</p>
+                  <p className="text-muted-foreground">{t('deliveryTeamPhone')}</p>
                 </div>
               </div>
 
@@ -66,8 +66,8 @@ export default function AboutPage() {
                   <Clock className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <p className="font-semibold mb-0.5">Operating Hours</p>
-                  <p className="text-muted-foreground">Mon - Sun: 8:00 AM - 10:00 PM</p>
+                  <p className="font-semibold mb-0.5">{t('operatingHours')}</p>
+                  <p className="text-muted-foreground">{t('operatingHoursTime')}</p>
                 </div>
               </div>
             </div>

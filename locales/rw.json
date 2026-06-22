@@ -221,6 +221,16 @@
   "faqA4": "Niba ukererewe, icyatumijwe cyawe kizabikwa neza.",
   "faqQ5": "Ese nshobora guhindura ibyo natumije?",
   "faqA5": "Ntushobora guhindura ibyo watumije wenyine nyuma yuko bishyirwa mu gikorwa.",
+  "aboutSubtitle": "Umufatanyabikorwa wawe wizerwa mu bucuruzi mu Rwanda kuva 2007.",
+  "ourHistory": "Amateka Yacu",
+  "historyP1": "Simba Supermarket yatangiye mu 2007 ari iduka rimwe, ikura ivamo imwe mu maduka manini kandi yizerwa mu Rwanda.",
+  "historyP2": "Twiyemeje guha abakiriya bacu ibicuruzwa byiza cyane, serivisi ihebuje, ndetse n'uburambe bugezweho bwo guhaha, yaba ku iduka cyangwa kuri interineti.",
+  "emailSupport": "Kuvugana n'abakiriya ukoresheje imeyili",
+  "localPhoneLines": "Imirongo ya terefone",
+  "customerServicePhone": "Kuvugana n'abakiriya: +250 788 123 456",
+  "deliveryTeamPhone": "Ikipe itanga ibicuruzwa: +250 788 654 321",
+  "operatingHours": "Amasaha yo gukora",
+  "operatingHoursTime": "Mbere - Cyumw: 8:00 AM - 10:00 PM",
   "products": {
     "prod-001": {
       "name": "Amata y'Inyange 1L",

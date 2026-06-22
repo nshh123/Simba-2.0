@@ -222,6 +222,16 @@
   "faqA4": "If you are running late, your order will be safely stored. Refrigerated or frozen items will be kept at the appropriate temperature. We hold pick-up orders until the end of the business day. If uncollected, we will contact you to reschedule.",
   "faqQ5": "Can I modify my order after placing it?",
   "faqA5": "You cannot modify an order yourself once it is placed. However, if you contact our customer support team immediately at info@simbasupermarket.rw or call us, we can typically make changes if the order hasn't been prepared or dispatched yet.",
+  "aboutSubtitle": "Your trusted retail partner in Rwanda since 2007.",
+  "ourHistory": "Our History",
+  "historyP1": "Founded in 2007, Simba Supermarket has grown from a single store to become one of Rwanda's leading and most trusted retail chains.",
+  "historyP2": "We are committed to providing our customers with the highest quality products, exceptional service, and a modern shopping experience, whether in-store or online.",
+  "emailSupport": "Email Support",
+  "localPhoneLines": "Local Phone Lines",
+  "customerServicePhone": "Customer Service: +250 788 123 456",
+  "deliveryTeamPhone": "Delivery Team: +250 788 654 321",
+  "operatingHours": "Operating Hours",
+  "operatingHoursTime": "Mon - Sun: 8:00 AM - 10:00 PM",
   "products": {
     "prod-001": {
       "name": "Inyange Fresh Milk 1L",
