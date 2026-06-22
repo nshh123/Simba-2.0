@@ -23,7 +23,7 @@ export function CartDrawer() {
   return (
     <Sheet open={isCartOpen} onOpenChange={setCartOpen}>
       <SheetContent className="flex flex-col w-full sm:max-w-lg">
-        <SheetHeader className="flex flex-row items-center justify-between border-b pb-4 mb-4">
+        <SheetHeader className="flex flex-row items-center justify-between border-b pb-4 mb-4 pr-10">
           <SheetTitle>{t('yourCart')}</SheetTitle>
           {cart.length > 0 && (
             <Button variant="destructive" size="sm" onClick={clearCart} className="h-8 px-3 text-xs font-bold gap-1.5">
