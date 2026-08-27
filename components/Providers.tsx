@@ -35,13 +35,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
     root.classList.add(theme);
   }, [theme]);
 
-  // Render initially with default language to allow SSR to match, then hydrate
+  // Render with default language and allow immediate SSR visibility
   return (
     <I18nextProvider i18n={i18n}>
       <ToastProvider>
-        <div style={{ visibility: mounted ? 'visible' : 'hidden' }}>
-          {children}
-        </div>
+        {children}
       </ToastProvider>
     </I18nextProvider>
   );
