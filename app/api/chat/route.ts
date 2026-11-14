@@ -42,12 +42,14 @@ export async function POST(req: Request) {
          }
     `;
 
+    const model = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+
     const chatCompletion = await groq.chat.completions.create({
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: message },
       ],
-      model: 'llama-3.1-8b-instant',
+      model,
       response_format: { type: 'json_object' },
     });
 
@@ -73,12 +75,31 @@ export async function POST(req: Request) {
   } catch (error: any) {
     console.error('Groq API Error Details:', error);
     
-    const errorMessage = error?.error?.message || error?.message || 'Unknown error';
+    let userFriendlyMessage = "I'm having trouble thinking right now. Please try again in a moment.";
+    const rawError = error?.error?.message || error?.message;
+
+    if (error?.error?.message) {
+      userFriendlyMessage = `I'm having trouble: ${error.error.message}`;
+    } else if (typeof rawError === 'string') {
+      const jsonMatch = rawError.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        try {
+          const parsed = JSON.parse(jsonMatch[0]);
+          if (parsed?.error?.message) {
+            userFriendlyMessage = `I'm having trouble: ${parsed.error.message}`;
+          }
+        } catch {
+          userFriendlyMessage = `I'm having trouble: ${rawError}`;
+        }
+      } else {
+        userFriendlyMessage = `I'm having trouble: ${rawError}`;
+      }
+    }
     
     return NextResponse.json({ 
-      response: `I'm having trouble thinking right now: ${errorMessage}`,
+      response: userFriendlyMessage,
       matchedProducts: [],
-      error: errorMessage
+      error: rawError || 'Unknown error'
     }, { status: 500 });
   }
 }

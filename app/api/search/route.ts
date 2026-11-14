@@ -40,12 +40,14 @@ export async function POST(req: Request) {
          }
     `;
 
+    const model = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+
     const chatCompletion = await groq.chat.completions.create({
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: query },
       ],
-      model: 'llama-3.1-8b-instant',
+      model,
       response_format: { type: 'json_object' },
     });
 

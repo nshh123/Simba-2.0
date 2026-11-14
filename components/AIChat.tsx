@@ -99,7 +99,7 @@ export function AIChat() {
 
           <div 
             ref={scrollRef}
-            className="flex-1 overflow-y-auto p-5 space-y-6 scroll-smooth"
+            className="flex-1 overflow-y-auto overflow-x-hidden p-5 space-y-6 scroll-smooth"
           >
             {chatHistory.length === 0 && (
               <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-100 py-10">
@@ -117,7 +117,7 @@ export function AIChat() {
 
             {chatHistory.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`flex gap-3 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                <div className={`flex gap-3 max-w-[85%] min-w-0 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
                   <div className={`shrink-0 h-8 w-8 rounded-full flex items-center justify-center border ${
                     msg.role === 'user' 
                       ? 'bg-blue-500 border-blue-600 text-white' 
@@ -125,13 +125,13 @@ export function AIChat() {
                   }`}>
                     {msg.role === 'user' ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
                   </div>
-                  <div className="space-y-3">
-                    <div className={`p-4 rounded-2xl shadow-sm ${
+                  <div className="space-y-3 min-w-0 flex-1">
+                    <div className={`p-4 rounded-2xl shadow-sm break-words [overflow-wrap:anywhere] ${
                       msg.role === 'user' 
                         ? 'bg-blue-600 text-white rounded-tr-none' 
                         : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 border border-gray-100 dark:border-gray-700 rounded-tl-none'
                     }`}>
-                      <p className="text-sm leading-relaxed">{msg.content}</p>
+                      <p className="text-sm leading-relaxed break-words [overflow-wrap:anywhere] whitespace-pre-wrap">{msg.content}</p>
                     </div>
 
                     {msg.products && msg.products.length > 0 && (
@@ -150,7 +150,7 @@ export function AIChat() {
 
             {loading && (
               <div className="flex justify-start">
-                <div className="flex gap-3 max-w-[85%]">
+                <div className="flex gap-3 max-w-[85%] min-w-0">
                   <div className="shrink-0 h-8 w-8 rounded-full bg-orange-500 border border-orange-600 text-white flex items-center justify-center">
                     <Bot className="h-4 w-4" />
                   </div>
