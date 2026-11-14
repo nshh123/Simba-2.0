@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import Groq from 'groq-sdk';
 import productsData from '@/data/simba_products.json';
+import { getAvailableGroqModel } from '@/lib/groq';
 
 export async function POST(req: Request) {
   try {
@@ -20,6 +21,7 @@ export async function POST(req: Request) {
     }
 
     const groq = new Groq({ apiKey: currentApiKey.trim() });
+    const { model } = await getAvailableGroqModel(groq);
 
     const systemPrompt = `
       You are an AI semantic search engine for Simba Supermarket.
@@ -39,8 +41,6 @@ export async function POST(req: Request) {
            "matchedProductIds": ["prod-001", "prod-002"] 
          }
     `;
-
-    const model = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
 
     const chatCompletion = await groq.chat.completions.create({
       messages: [

@@ -1,8 +1,12 @@
 import { NextResponse } from 'next/server';
 import Groq from 'groq-sdk';
 import productsData from '@/data/simba_products.json';
+import { getAvailableGroqModel } from '@/lib/groq';
 
 export async function POST(req: Request) {
+  let activeModel = 'llama-3.3-70b-versatile';
+  let activeModelsList: string[] = [];
+
   try {
     const { message } = await req.json();
 
@@ -22,6 +26,9 @@ export async function POST(req: Request) {
     }
 
     const groq = new Groq({ apiKey: currentApiKey.trim() });
+    const { model, availableModels } = await getAvailableGroqModel(groq);
+    activeModel = model;
+    activeModelsList = availableModels;
 
     const systemPrompt = `
       You are a helpful assistant for Simba Supermarket.
@@ -42,14 +49,12 @@ export async function POST(req: Request) {
          }
     `;
 
-    const model = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
-
     const chatCompletion = await groq.chat.completions.create({
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: message },
       ],
-      model,
+      model: activeModel,
       response_format: { type: 'json_object' },
     });
 
@@ -94,6 +99,14 @@ export async function POST(req: Request) {
       } else {
         userFriendlyMessage = `I'm having trouble: ${rawError}`;
       }
+    }
+
+    if (
+      typeof rawError === 'string' &&
+      (rawError.includes('does not exist') || rawError.includes('not have access') || rawError.includes('model_not_found'))
+    ) {
+      const modelsListStr = activeModelsList.length > 0 ? activeModelsList.join(', ') : 'None listed';
+      userFriendlyMessage = `Model '${activeModel}' is not accessible on your Groq project. Available models for this key: [${modelsListStr}]. You can check your Groq Playground or set GROQ_MODEL in .env.local.`;
     }
     
     return NextResponse.json({ 
