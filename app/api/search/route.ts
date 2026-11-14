@@ -42,14 +42,20 @@ export async function POST(req: Request) {
          }
     `;
 
-    const chatCompletion = await groq.chat.completions.create({
+    const completionOptions: any = {
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: query },
       ],
       model,
       response_format: { type: 'json_object' },
-    });
+    };
+
+    if (model.startsWith('openai/gpt-oss')) {
+      completionOptions.reasoning_format = 'hidden';
+    }
+
+    const chatCompletion = await groq.chat.completions.create(completionOptions);
 
     const content = chatCompletion.choices[0]?.message?.content;
     if (!content) {

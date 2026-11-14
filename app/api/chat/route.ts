@@ -4,7 +4,7 @@ import productsData from '@/data/simba_products.json';
 import { getAvailableGroqModel } from '@/lib/groq';
 
 export async function POST(req: Request) {
-  let activeModel = 'llama-3.3-70b-versatile';
+  let activeModel = 'openai/gpt-oss-120b';
   let activeModelsList: string[] = [];
 
   try {
@@ -49,14 +49,20 @@ export async function POST(req: Request) {
          }
     `;
 
-    const chatCompletion = await groq.chat.completions.create({
+    const completionOptions: any = {
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: message },
       ],
       model: activeModel,
       response_format: { type: 'json_object' },
-    });
+    };
+
+    if (activeModel.startsWith('openai/gpt-oss')) {
+      completionOptions.reasoning_format = 'hidden';
+    }
+
+    const chatCompletion = await groq.chat.completions.create(completionOptions);
 
     const content = chatCompletion.choices[0]?.message?.content;
     if (!content) {

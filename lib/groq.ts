@@ -7,7 +7,7 @@ export async function getAvailableGroqModel(
   groq: Groq,
   preferredModel?: string
 ): Promise<{ model: string; availableModels: string[] }> {
-  const target = preferredModel || process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+  const target = preferredModel || process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
   const now = Date.now();
 
   if (!cachedModels || now - lastFetchTime > 5 * 60 * 1000) {
@@ -30,8 +30,11 @@ export async function getAvailableGroqModel(
       return { model: target, availableModels: available };
     }
 
-    // Preferred candidates in priority order
+    // Preferred candidates in priority order matching active Groq models
     const priorityList = [
+      'openai/gpt-oss-120b',
+      'openai/gpt-oss-20b',
+      'qwen/qwen3.8-27b',
       'llama-3.3-70b-versatile',
       'llama-3.1-70b-versatile',
       'llama-3.1-8b-instant',
@@ -39,9 +42,6 @@ export async function getAvailableGroqModel(
       'llama3-8b-8192',
       'mixtral-8x7b-32768',
       'gemma2-9b-it',
-      'openai/gpt-oss-120b',
-      'openai/gpt-oss-20b',
-      'qwen-2.5-32b',
     ];
 
     for (const candidate of priorityList) {
